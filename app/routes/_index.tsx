@@ -3,6 +3,7 @@ import { json } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 import { z } from 'zod';
 import { zx } from 'zodix';
+import styles from '~/styles/main.module.css';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Dexa Coding Interview' }];
@@ -20,20 +21,22 @@ export async function loader(args: LoaderFunctionArgs) {
 export default function Index() {
   const { q, searchResults, summary } = useLoaderData<typeof loader>();
   return (
-    <div>
-      <h1>Perplexity clone (Kevin)</h1>
-      <p>Ask anything</p>
-      <Form method="get">
-        <label htmlFor="search">Search</label>
-        <input
-          type="search"
-          name="q"
-          id="search"
-          defaultValue={q ?? ''}
-          placeholder="Search the web"
-        />
-        <button type="submit">Search</button>
-      </Form>
+    <div className={styles.main}>
+      <h1 className={styles.title}>Puzzlement</h1>
+      <h2 className={styles.subtitle}>The journey starts here</h2>
+      <div className={styles.queryContainer}>
+        <Form method="get">
+          <input
+            className={styles.queryInput}
+            type="search"
+            name="q"
+            id="search"
+            defaultValue={q ?? ''}
+            placeholder="Ask anything"
+          />
+          <button type="submit">Search</button>
+        </Form>
+      </div>
       {summary ? <p>{`Summary: ${summary}`}</p> : null}
     </div>
   );
