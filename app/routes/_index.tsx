@@ -1,5 +1,5 @@
-import { json } from '@remix-run/node';
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json } from '@remix-run/node';
 import { Form, useLoaderData } from '@remix-run/react';
 import { z } from 'zod';
 import { zx } from 'zodix';
