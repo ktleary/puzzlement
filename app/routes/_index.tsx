@@ -21,8 +21,8 @@ export default function Index() {
   const { q, searchResults, summary } = useLoaderData<typeof loader>();
   return (
     <div>
-      <h1>Welcome to the Dexa coding interview!</h1>
-      <p>See the readme for instructions.</p>
+      <h1>Perplexity clone (Kevin)</h1>
+      <p>Ask anything</p>
       <Form method="get">
         <label htmlFor="search">Search</label>
         <input
