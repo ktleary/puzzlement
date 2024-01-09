@@ -31,7 +31,15 @@ export async function summarizeSearchResults(args: {
 }): Promise<string> {
   const { query, searchResults } = args;
 
-  let prompt = `Provide an objective summary about "${query}" based on the following search results. The summary should be in the third person, focusing on general recommendations or findings without personal opinions. Present the information in a clear and concise manner:\n\n`;
+  let prompt = `Provide an objective summary about "${query}" based on the provided information. The summary should be in the third person, focusing on general recommendations or findings without personal opinions. Present the information in a clear and concise manner. When citing sources, refer to them by their index number as provided in the input.
+
+  Example:
+  Question: When did ancient peoples usually harvest sugar cane?
+  Answer: Ancient peoples harvested sugar cane at different times across the world. It was an ancient crop of Austronesian and Papuan people, introduced to southern China and India around 1200 to 1000 BC (Source 1). It became widespread in the medieval Arab world and in medieval Southern Europe during Arab rule (Source 2). The first sugar harvest in the Americas occurred in 1501 (Source 3). The harvesting times varied regionally and culturally.
+  
+  Provided Information:\n\n
+  `;
+  
 
   searchResults.forEach((result, index) => {
     prompt += `Result ${index + 1}: ${result.snippet}\n`;
