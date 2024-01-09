@@ -36,22 +36,21 @@ export async function summarizeSearchResults(args: {
 }): Promise<string> {
   const { query, searchResults } = args;
 
-  const messages: Prompt.Msg[] = [
-    Msg.user(
-      'Summarize the following search engine results for ' +
-        query +
-        '. Give priority to the top results. The summary will be displayed to the user as one answer to their query and must not be ambiguous.'
-    ),
-  ];
+  // Constructing a prompt that emphasizes a direct answer without referencing the search results
+  let prompt = `Answer the question "${query}" as if you are an expert in the field. Use the following search results to inform your response, but do not reference the search results in your answer. Provide a clear and concise response:\n\n`;
 
-  searchResults.forEach((result) => messages.push(Msg.user(result.snippet)));
-
-  console.log('messages', messages, 'query', query);
-
-  const { message } = await chatModel.run({
-    messages: messages,
+  // Adding search result snippets to the prompt
+  searchResults.forEach((result, index) => {
+    prompt += `Result ${index + 1}: ${result.snippet}\n`;
   });
 
+  // Log the generated prompt for debugging
+  console.log('Generated Prompt:', prompt);
+
+  // Send the prompt to the model
+  const { message } = await chatModel.run({ messages: [Msg.user(prompt)] });
+
+  // Check and return the model's response
   if (!Msg.isAssistant(message)) {
     throw new Error('Expected assistant message');
   }
