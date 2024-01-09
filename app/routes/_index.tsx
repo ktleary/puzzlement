@@ -4,7 +4,9 @@ import { Form, useLoaderData } from '@remix-run/react';
 import { z } from 'zod';
 import { zx } from 'zodix';
 import styles from '~/styles/main.module.css';
-import { SearchResult, searchGoogle } from '../services/serpapi';
+import type { SearchResult } from '../services/serpapi';
+import { searchGoogle } from '../services/serpapi';
+import { summarizeSearchResults } from '~/services/openai';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Dexa Coding Interview' }];
@@ -19,7 +21,8 @@ export async function loader(args: LoaderFunctionArgs) {
     return json({ q, searchResults: [], summary: '' });
   }
   const searchResults: SearchResult[] = await searchGoogle(q);
-  const summary = q?.length ? `TODO: Summary of search results for "${q}"` : '';
+  const aiSummary = await summarizeSearchResults({ query: q, searchResults });
+  const summary = q?.length ? aiSummary : '';
   return json({ q, searchResults, summary });
 }
 
