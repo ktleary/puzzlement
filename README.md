@@ -1,17 +1,11 @@
-# Welcome to the Dexa coding interview
+# Puzzlement -- A perplexity.ai clone
 
-This is meant to be a collaborative "open book" exercise. Please use any apps, 
-tools, AI, etc that you would normally use while programming.
+## Summary
 
-We have also included a few helpful services/tools to save you time. More 
-details below.
+a simple clone of [Perplexity](https://www.perplexity.ai/).
 
-## Task
-
-Build a simple clone of [Perplexity](https://www.perplexity.ai/).
-
-When the user submits a new search, they should be presented with the search 
-results from Google, as well as an AI generated response to their query, based 
+When the user submits a new search, they should be presented with the search
+results from Google, as well as an AI generated response to their query, based
 on the retrieved Google search results.
 
 ## Setup
@@ -28,7 +22,7 @@ on the retrieved Google search results.
 
 ## Services
 
-These are helpful services that we have already configured for you. Find the 
+These are helpful services that we have already configured for you. Find the
 code in `/app/services/`.
 
 - OpenAI: use GPT 3.5
