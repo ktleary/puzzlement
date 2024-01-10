@@ -20,6 +20,7 @@ export async function loader(args: LoaderFunctionArgs) {
   }
 
   const searchResults = await searchGoogle(q);
+  // console.log('searchResults', searchResults);
   const aiSummary = summarizeSearchResults({
     query: q,
     searchResults,
@@ -36,30 +37,46 @@ export default function Result() {
   const data = useLoaderData<typeof loader>();
   const { q, searchResults, summary } = data;
 
+  const topResults = searchResults.slice(0, 3) || [];
+
   return (
-    <div className={styles.resultsContainer}>
-      <h1 className={styles.queryTitle}>{q}</h1>
-      <h2 className={styles.sourcesTitle}>Sources</h2>
-      <div className={styles.listContainer}>
-        {searchResults.map((result, i) => (
-          <div key={`sr-${i}`} className={styles.resultItem}>
-            <a className={styles.resultLink} href={result?.link}>
-              {truncate(result?.title || '')}
-            </a>
-            <div className={styles.resultDomain}>
-              {getHostname(result?.link || '')}
+    <div className={styles.answerScreen}>
+      <div className={styles.resultsContainer}>
+        <h1 className={styles.queryTitle}>{q}</h1>
+        <h2 className={styles.sourcesTitle}>Sources</h2>
+        <div className={styles.listContainer}>
+          {topResults.map((result, i) => (
+            <div key={`sr-${i}`} className={styles.resultItem}>
+              <a className={styles.resultLink} href={result?.link}>
+                {truncate(result?.source || '')}
+              </a>
+              <div className={styles.resultDomain}>
+                {getHostname(result?.link || '')}
+              </div>
+              {/* <div className={styles.resultSnippet}>{result?.snippet}</div> */}
             </div>
-            <div className={styles.resultSnippet}>{result?.snippet}</div>
-          </div>
-        ))}
+          ))}
+        </div>
+        <Suspense fallback={<div>{data.q}</div>}>
+          <Await
+            resolve={summary}
+            errorElement={<div>Something went wrong</div>}
+          >
+            {(summary) => (
+              <>
+                <h2 className={styles.answerTitle}>Answer</h2>
+                <div>{summary ? <p>{` ${summary}`}</p> : null}</div>
+              </>
+            )}
+          </Await>
+        </Suspense>
       </div>
-      <Suspense fallback={<div>{data.q}</div>}>
-        <Await resolve={summary} errorElement={<div>Something went wrong</div>}>
-          {(summary) => (
-            <div>{summary ? <p>{`Summary: ${summary}`}</p> : null}</div>
-          )}
-        </Await>
-      </Suspense>
+      <div className={styles.sidebarContainer}>
+        <h2 className={styles.sidebarTitle}>Sidebar</h2>
+        <div className={styles.sidebarContent}>
+          <p>Some content</p>
+        </div>
+      </div>
     </div>
   );
 }

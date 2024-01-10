@@ -81,19 +81,43 @@ body {
   }
 }
 
+.answerScreen {
+  display: flex;
+  flex-direction: row;
+  margin-top: 2rem;
+}
+
+.sidebarContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #383838;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
 .resultsContainer {
   display: flex;
   flex-direction: column;
   padding: 2rem;
   border-radius: 8px;
+  max-width: 50rem;
 }
 
 .sourcesTitle {
   font-size: 1.25rem;
   margin: 0;
+  padding: 0;
   margin-bottom: 1rem;
+  font-weight: 400;
+}
+
+.answerTitle {
+  font-size: 1.25rem;
+  margin: 0;
+  padding: 0;
   margin-top: 1rem;
-  margin-bottom: 2rem;
+  font-weight: 400;
 }
 
 .resultDomain {
@@ -129,11 +153,11 @@ body {
 .resultItem {
   flex: none;
   margin-right: 20px;
-  height: 100px;
+  height: 90px;
   background-color: #383838;
-  width: 10rem;
+  width: 160px;
   border-radius: 1rem;
-  padding: 0.25rem;
+  padding: 0.5rem;
 }
 
 /*

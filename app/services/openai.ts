@@ -39,10 +39,9 @@ export async function summarizeSearchResults(args: {
   
   Provided Information:\n\n
   `;
-  
 
   searchResults.forEach((result, index) => {
-    prompt += `Result ${index + 1}: ${result.snippet}\n`;
+    prompt += `Result ${index + 1}: ${result.description}\n`;
   });
 
   const { message } = await chatModel.run({ messages: [Msg.user(prompt)] });
