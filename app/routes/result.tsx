@@ -9,6 +9,7 @@ import styles from '~/styles/main.module.css';
 import { searchGoogle } from '../services/serpapi';
 import { truncate } from '~/util/text.util';
 import { getHostname } from '~/util/url.util';
+import BackButton from '~/components/backbutton';
 
 export async function loader(args: LoaderFunctionArgs) {
   const { q } = zx.parseQuery(args.request, {
@@ -23,7 +24,9 @@ export async function loader(args: LoaderFunctionArgs) {
   // console.log('searchResults', searchResults);
   const aiSummary = summarizeSearchResults({
     query: q,
-    searchResults,
+    searchResults: searchResults?.filter((sr) =>
+      ['knowledge_graph', 'organic_result', 'answer_box'].includes(sr?.kind)
+    ),
   });
 
   return defer({
@@ -39,47 +42,87 @@ export default function Result() {
 
   const topResults = searchResults.slice(0, 3) || [];
 
+  const relatedImages = searchResults.reduce<string[]>((acc, sr) => {
+    if (
+      sr?.thumbnail &&
+      (sr?.kind === 'answer_box' || sr?.kind === 'top_stories')
+    ) {
+      acc.push(sr.thumbnail);
+    }
+    return acc;
+  }, []);
+
+  console.log('relatedImages', relatedImages);
+
   return (
     <div className={styles.answerScreen}>
       <div className={styles.resultsContainer}>
+        <BackButton />
         <h1 className={styles.queryTitle}>{q}</h1>
         <h2 className={styles.sourcesTitle}>Sources</h2>
         <div className={styles.listContainer}>
           {topResults.map((result, i) => (
             <div key={`sr-${i}`} className={styles.resultItem}>
-              <a className={styles.resultLink} href={result?.link}>
-                {truncate(result?.source || '')}
+              <a
+                className={styles.resultLink}
+                href={result?.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {truncate(result?.title || '')}
               </a>
               <div className={styles.resultDomain}>
                 {getHostname(result?.link || '')}
               </div>
-              {/* <div className={styles.resultSnippet}>{result?.snippet}</div> */}
             </div>
           ))}
         </div>
-        <Suspense fallback={<div>{data.q}</div>}>
-          <Await
-            resolve={summary}
-            errorElement={<div>Something went wrong</div>}
-          >
+        <Suspense
+          fallback={
+            <div className={styles.summaryText}>
+              <p>Generating summary...</p>
+            </div>
+          }
+        >
+          <Await resolve={summary}>
             {(summary) => (
               <>
                 <h2 className={styles.answerTitle}>Answer</h2>
-                <div>{summary ? <p>{` ${summary}`}</p> : null}</div>
+                <div className={styles.summaryText}>
+                  {summary ? <p>{` ${summary}`}</p> : null}
+                </div>
               </>
             )}
           </Await>
         </Suspense>
       </div>
-      <div className={styles.sidebarContainer}>
-        <h2 className={styles.sidebarTitle}>Sidebar</h2>
-        <div className={styles.sidebarContent}>
-          <p>Some content</p>
+      {relatedImages.length ? (
+        <div className={styles.sidebarContainer}>
+          <div className={styles.sidebarContent}>
+            {relatedImages.map((img, i) => (
+              <img
+                key={`img-${i}`}
+                className={styles.relatedImage}
+                src={img}
+                alt=""
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 }
+
+/*
+ | 'organic_result'
+    | 'knowledge_graph'
+    | 'inline_video'
+    | 'related_question'
+    | 'answer_box'
+    | 'top_stories'
+    | 'related_searches';
+    */
 
 /*
  <ul className={styles.listContainer}>

@@ -73,17 +73,35 @@ export async function searchGoogle(query: string): Promise<SearchResult[]> {
     });
   }
 
-  if (!isEmpty(answer_box)) {
-    const { title, description, source, thumbnail } = answer_box || {};
+/*
+ answer_box: {
+    type: 'organic_result',
+    title: 'Martin Luther King Jr. Day/Date (2024)',
+    link: 'https://www.google.com/search?sca_esv=60d48f26e3e45296&sca_upv=1&q=+date+(2024)&stick=H4sIAAAAAAAAAONgFuLUz9U3MDQ3Tk5SQjC1-Jzzc3Pz84IzU1LLEyuLFzGKZydb6ZdnpOZlFuunlqXmlRRbpSSWpBYvYuVRADEUNIwMjEw0AR8BfWdRAAAA&sa=X&ved=2ahUKEwib77fd1NGDAxWGs4QIHSKOA3QQMSgAegQIKhAB',
+    answer: 'Mon, Jan 15, 2024',
+    thumbnail: 'https://serpapi.com/searches/659df1d8925641038647d69b/images/2d9a39f219f625d022cdfd3753d47ac607489ef04e6896ca.jpeg',
+    people_also_search_for: [
+      [Object], [Object],
+      [Object], [Object],
+      [Object], [Object],
+      [Object]
+    ]
+  },
+  ...
+  */
 
-    const { name, link } = source || {};
+
+  if (!isEmpty(answer_box)) {
+    const { title, answer, link, thumbnail } = answer_box || {};
+
+   
 
     searchResults.push({
       position: searchResults.length,
       title,
       link,
-      description,
-      source: name,
+      description: answer,
+      source: 'Google',
       thumbnail,
       kind: 'answer_box',
     });

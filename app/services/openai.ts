@@ -1,9 +1,4 @@
-import {
-  ChatModel,
-  createOpenAIClient,
-  Msg,
-  type Prompt,
-} from '@dexaai/dexter';
+import { ChatModel, createOpenAIClient, Msg } from '@dexaai/dexter';
 import { EnvVars } from './env-vars';
 import type { SearchResult } from './serpapi';
 

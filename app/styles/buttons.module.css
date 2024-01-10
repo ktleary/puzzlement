@@ -1,0 +1,19 @@
+.backButtonContainer {
+  position: relative;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #454545;
+  color: #90caf9;
+  text-decoration: none;
+  &:hover {
+    color: #4d79ff;
+    background-color: #454545;
+  }
+}
