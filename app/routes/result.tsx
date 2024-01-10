@@ -36,13 +36,8 @@ export async function loader(args: LoaderFunctionArgs) {
   });
 }
 
-export default function Result() {
-  const data = useLoaderData<typeof loader>();
-  const { q, searchResults, summary } = data;
-
-  const topResults = searchResults.slice(0, 3) || [];
-
-  const relatedImages = searchResults.reduce<string[]>((acc, sr) => {
+const getRelatedImages = (searchResults: any[]) => {
+  return searchResults.reduce<string[]>((acc, sr) => {
     if (
       sr?.thumbnail &&
       (sr?.kind === 'answer_box' || sr?.kind === 'top_stories')
@@ -51,8 +46,13 @@ export default function Result() {
     }
     return acc;
   }, []);
+};
 
-  console.log('relatedImages', relatedImages);
+export default function Result() {
+  const data = useLoaderData<typeof loader>();
+  const { q, searchResults, summary } = data;
+  const topResults = searchResults.slice(0, 5) || [];
+  const relatedImages = getRelatedImages(searchResults);
 
   return (
     <div className={styles.answerScreen}>
@@ -113,87 +113,3 @@ export default function Result() {
     </div>
   );
 }
-
-/*
- | 'organic_result'
-    | 'knowledge_graph'
-    | 'inline_video'
-    | 'related_question'
-    | 'answer_box'
-    | 'top_stories'
-    | 'related_searches';
-    */
-
-/*
- <ul className={styles.listContainer}>
-        {data.searchResults.map((result, i) => (
-          <li key={`sr-${i}`} className={styles.resultItem}>
-            <a className={styles.resultLink} href={result?.link}>
-              {result?.title}
-            </a>
-            <p className={styles.resultSnippet}>{result?.snippet}</p>
-          </li>
-        ))}
-      </ul>
-      */
-/* <h1 className={styles.queryTitle}>{q}</h1>
-          {summary ? <p>{`Summary: ${summary}`}</p> : null}
-          <ul className={styles.listContainer}>
-            {searchResults.map((result, i) => (
-              <li key={`sr-${i}`} className={styles.resultItem}>
-                <a className={styles.resultLink} href={result?.link}>
-                  {result?.title}
-                </a>
-                <p className={styles.resultSnippet}>{result?.snippet}</p>
-              </li>
-            ))}
-          </ul> */
-
-// const aiSummary = searchResults.then((searchResults) => {
-//  const result =  summarizeSearchResults({ query: q, searchResults })
-//  return json({ q, searchResults, summary: result });
-// }
-// );
-//   const resultsAll = searchGoogle(q).then((searchResults) => {
-//     const aiSummary = summarizeSearchResults({ query: q, searchResults });
-//     const summary = q?.length ? aiSummary : '';
-//     return { searchResults, summary };
-//     // return json({ q, searchResults, summary });
-//   });
-//   const aiSummary = summarizeSearchResults({ query: q, searchResults });
-//   const summary = q?.length ? aiSummary : '';
-//   return json({ q, searchResults, summary });
-
-/*
-// So you can write this without awaiting the promise:
-  return defer({
-    critical: "data",
-    slowPromise: aStillRunningPromise,
-  });
-  */
-
-/*
-example:
-export default function Index() {
-  const data = useLoaderData()
-  const params = useParams()
-  const stream = useEventSource(
-    `/items/${params.hash}/progress`,
-    {
-      event: "progress",
-    },
-  )
-  return (
-    <div>
-      <Suspense fallback={<span> {stream}% </span>}>
-        <Await
-          resolve={data.promise}
-          errorElement={<p>Error loading img!</p>}
-        >
-          {(promise) => <img alt="" src={promise.img} />}
-        </Await>
-      </Suspense>
-    </div>
-  )
-}
-*/
