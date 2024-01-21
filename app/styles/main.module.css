@@ -44,6 +44,15 @@ body {
   border-radius: 8px;
 }
 
+.followupQuery {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  background-color: #383838;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
 .queryInput {
   margin-bottom: 1rem;
   padding: 1rem;
